@@ -1,12 +1,17 @@
-FROM python:3.6.5-slim
+# Dockerfile
+FROM python:3.9
 
-RUN apt-get update
+# Set working directory
+WORKDIR /src
 
-WORKDIR /code
+# Copy requirements file
+COPY requirements.txt .
 
-COPY requirements.txt /code/requirements.txt
-RUN pip install -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /code
+# Copy application code
+COPY . .
 
-CMD ["bash"]
+# Command to run the application
+CMD ["python", "./src/main.py"]
