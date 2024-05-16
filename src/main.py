@@ -1,7 +1,8 @@
 import networkx as nx 
 # import matplotlib
 import matplotlib.pyplot as plt
-
+import matplotlib.colors as mcolors
+import matplotlib as mpl
 # matplotlib.use('Agg')
 
 def main():
@@ -27,18 +28,27 @@ def main():
                                                               weight=None,     # The name of an edge attribute that holds the numerical value used as a weight
                                                               resolution=1,    # If resolution is less than 1, the algorithm favors larger communities. Greater than 1 favors smaller communities
                                                               threshold=1e-7,  # Modularity gain threshold for each level.
-                                                              seed=None
+                                                              seed=20
                                                              )
     
     # Draw communities
-    nx.draw(graph, nx.spring_layout(graph), edge_color='k', with_labels=True, font_weight='light', node_size= 280, width= 0.9)
+    pos = nx.spring_layout(graph,seed=12)
+    nx.draw(graph, pos, edge_color='k', with_labels=True, font_weight='light', node_size= 280, width= 0.9)
     
+    # Give unique color and label to communities
+    num = len(communities)
+    
+    cmap = mpl.colormaps['viridis'].resampled(num+1)
+    # cmap = cm.get_cmap('hsv', num)
+    colors = [mcolors.to_hex(cmap(i)) for i in range(num)]
+    
+    
+    
+    for i,community in enumerate(communities):
+        nx.draw_networkx_nodes(graph,pos,nodelist=community,node_color=colors[i],label=f'C{i}_{len(community)}')
+    
+    plt.legend()
     plt.savefig('figure.png')
-    # plt.show()
     
-
-
-
-
 if __name__ == "__main__":
     main()
