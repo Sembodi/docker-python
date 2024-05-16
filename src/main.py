@@ -1,8 +1,8 @@
 import networkx as nx 
-import matplotlib
+# import matplotlib
 import matplotlib.pyplot as plt
 
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 
 def main():
     print("Hello World!")
@@ -33,9 +33,9 @@ def main():
     # Draw communities
     nx.draw(graph, nx.spring_layout(graph), edge_color='k', with_labels=True, font_weight='light', node_size= 280, width= 0.9)
     
-    plt.plot([1,2,3,4],[1,2,3,4])
     plt.savefig('figure.png')
-    plt.show()
+    # plt.show()
+    
 
 
 

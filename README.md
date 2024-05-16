@@ -15,4 +15,13 @@
 docker build -t image .
 
 # run container
-docker run image
+docker run --name test image
+
+# copy file from container
+docker cp test:/src/figure.png ./src
+
+# remove container
+docker rm -f test
+
+# build and run
+./run.sh
