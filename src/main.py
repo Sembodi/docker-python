@@ -3,6 +3,11 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib as mpl
+import infomap as im
+import modularitydensity as md
+# from modularitydensity.metrics import modularity_density
+# from modularitydensity.fine_tuned_modularity_density import fine_tuned_clustering_qds
+import numpy as np
 # matplotlib.use('Agg')
 
 def main():
@@ -39,10 +44,7 @@ def main():
     num = len(communities)
     
     cmap = mpl.colormaps['viridis'].resampled(num+1)
-    # cmap = cm.get_cmap('hsv', num)
     colors = [mcolors.to_hex(cmap(i)) for i in range(num)]
-    
-    
     
     for i,community in enumerate(communities):
         nx.draw_networkx_nodes(graph,pos,nodelist=community,node_color=colors[i],label=f'C{i}_{len(community)}')
@@ -50,5 +52,36 @@ def main():
     plt.legend()
     plt.savefig('figure.png')
     
+    # Greedy modularity maximization 
+    mm = nx.community.greedy_modularity_communities(graph)
+    print(f' Number of communities: {len(mm)}, modularity maximization (greedy) of community 1: {mm[0]}')
+    
+    # map equation
+    infomap = im.Infomap("--two-level")
+    
+    for edge in graph.edges():
+        infomap.add_link(edge[0], edge[1])
+        
+    infomap.run()
+
+        
+    communitiesME = infomap.getModules()
+    for node, community in communitiesME.items():
+        print(f"Node {node} is in community {community}")
+        
+    # modularity density
+    # adj = nx.to_scipy_sparse_array(graph) #convert to sparse matrix
+    # communityArray = md.fine_tuned_modularity_density.fine_tuned_clustering_qds(graph)
+    # modden = md.metrics.modularity_density(adj, communityArray, np.unique(communityArray))
+    # print(f'modularity density: {modden}')
+    
+    
+
+    
+    
+    
+    
 if __name__ == "__main__":
     main()
+
+

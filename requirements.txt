@@ -1,2 +1,6 @@
 matplotlib
 networkx[default]
+infomap
+modularitydensity
+scikit-learn
+python-louvain
