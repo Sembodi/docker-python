@@ -112,34 +112,6 @@ def coverage(graph: nx.Graph, partition: List[List[int]]) -> float:
 
 
 
-sdfdfd   def func
-dfdfdf   def func
-dfdf   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-dffd   def func
-# dffd  # def func
-
-
-
-
-
-
-
-
-
 
 
 
