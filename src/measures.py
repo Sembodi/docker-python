@@ -2,7 +2,7 @@ import networkx as nx
 import random
 
 import numpy as np
-from typing import List
+from typing import List, Tuple
 
 # def initial_two_partitions(graph: nx.Graph) -> Tuple[List[int], List[int]]:
 #     """ This function randomly partitions the graph into two equal size sets
@@ -97,14 +97,62 @@ def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
 
 
 def modularity_density(graph: nx.Graph, partition: List[List[int]]) -> float:
-    #zelf definieren
-    return
+    alpha = 2
+    edges = len(graph.nodes())
+    sum = 0
+    
+    for i, com in enumerate(partition):
+        ci = len(com)
+        eIn, eOut = calc_E_Ein_Eout(graph, com)
+        dci = calc_dci(alpha, eIn, ci)
 
-def performance(graph: nx.Graph, partition: List[List[int]]) -> float:
-    return
+        step = eIn / edges * dci - ((alpha * eIn + eOut)/(alpha * edges)*dci)**2
 
-def coverage(graph: nx.Graph, partition: List[List[int]]) -> float:
-    return
+        for other in np.delete(partition, i, 0):
+            cj = len(other)
+            ecicj = calc_Ecicj(graph, com, other)
+            dcicj = calc_dcicj(ecicj, ci, cj)
+
+            step += ecicj / (alpha * edges) * dcicj
+        
+        sum += step
+
+    return sum
+
+def calc_Ein_Eout(graph: nx.Graph, part: List[int]) -> Tuple[int, int]:
+    ein, eout = 0, 0
+    
+    for node in part:
+        for neighbor in graph.neighbors(node):
+            if (neighbor in part):
+                ein += .5
+            else:
+                eout += 1
+    return ein, eout
+
+
+def calc_Ecicj(graph: nx.Graph, ci: List[int], cj: List[int]) -> int:
+    ecicj = 0
+    
+    for node in ci:
+        for neighbor in graph.neighbors(node):
+            if (neighbor in cj):
+                ecicj += 1
+    return ecicj
+
+def calc_dci(alpha, ein, ci) -> int:
+    return alpha * ein / (ci*(ci - 1))
+
+def calc_dcicj(ecicj, ci, cj) -> int:
+    return ecicj / (ci*cj)
+
+
+
+# def performance(graph: nx.Graph, partition: List[List[int]]) -> float:
+#     return
+
+# def coverage(graph: nx.Graph, partition: List[List[int]]) -> float:
+#     return
 
 
 
