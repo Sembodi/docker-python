@@ -33,9 +33,9 @@ class snm:
         Returns:
             Tuple[List[int], List[int]]: Returns two partitions/sets of ≈ equal length.
         """
-        nodes = List(self.graph.nodes())
+        nodes = list(self.graph.nodes())
         random.shuffle(nodes)
-        center = len(nodes) * 0.5
+        center = int(len(nodes) * 0.5)
         return nodes[:center], nodes[center:]
     
     def __move_node(self, node: int, from_partition: List[int], to_partition: List[int]) -> None:
@@ -53,19 +53,16 @@ class snm:
         """ This function calculates what the effect is of moving the given node to the other partition.
 
         Args:
-            graph (nx.Graph): The community network.
-            partitions (Tuple[List[int], List[int]]): The two partitions of the graph.
             node (int): The node that we move to the other partition.
-            measure_func (Callable[[nx.Graph, List[List[int]]], float]): The function that determines the score based on the given measurement function.
 
         Returns:
             float: The measurement score if we would move the specified node to the other partition.
         """
         partition1, partition2 = self.partitions
         if node in partition1:
-            score = self.__compute_score_step(self, node, partition1, partition2)
+            score = self.__compute_score_step(node, partition1, partition2)
         else:
-            score = self.__compute_score_step(self, node, partition2, partition1)
+            score = self.__compute_score_step(node, partition2, partition1)
 
         return score
     
@@ -81,7 +78,7 @@ class snm:
             float: The score of moving the node to the second partition.
         """
         self.__move_node(node,partition1,partition2)
-        score = self.measure_func(self.graph, [partition1,partition2])
+        score = self.score_func(self.graph, [partition1,partition2])
         self.__move_node(node,partition2,partition1)
         return score
     
@@ -119,15 +116,24 @@ class snm:
                 self.__move_node(best_node, partition2, partition1)
                 
             X.remove(best_node)
-            current_score = self.score_func()
+            current_score = self.score_func(self.graph,(partition1,partition2))
             
-            if self.__is_improving(current_score, best_score):
-                best_score = current_score
-                best_partitions = (partition1.copy(), partition2.copy())
+            if self.__is_improving(current_score, self.best_score):
+                self.best_score = current_score
+                self.best_partitions = (partition1.copy(), partition2.copy())
 
-        return best_partitions, best_score
+        return self.best_partitions, self.best_score
     
     def __is_improving(self, effect, best_effect) -> bool:
+        """_summary_
+
+        Args:
+            effect (_type_): _description_
+            best_effect (_type_): _description_
+
+        Returns:
+            bool: _description_
+        """
         if self.maximize:
             isBetter = effect > best_effect
         else:
