@@ -4,94 +4,6 @@ import random
 import numpy as np
 from typing import List, Tuple
 
-# def initial_two_partitions(graph: nx.Graph) -> Tuple[List[int], List[int]]:
-#     """ This function randomly partitions the graph into two equal size sets
-
-#     Args:
-#         graph (nx.Graph): is a community network.
-
-#     Returns:
-#         Tuple[List[int], List[int]]: Returns two partitions/sets of ≈ equal length.
-#     """
-#     nodes = List(graph.nodes())
-#     random.shuffle(nodes)
-#     center = len(nodes) * 0.5
-#     return nodes[:center], nodes[center:]
-
-# def move_node(node: int, from_partition: List[int], to_partition: List[int]) -> None:
-#     """ This function moves a node from one partition to the other partition.
-
-#     Args:
-#         node (int): The node to move.
-#         from_partition (List[int]): The partition in which the node is removed.
-#         to_partition (List[int]): The partition in which the node is added.
-#     """
-#     from_partition.remove(node)
-#     to_partition.append(node)
-
-# def compute_measure_score_effect(graph: nx.Graph, 
-#                                  partitions: Tuple[List[int], List[int]],
-#                                  node: int,
-#                                  measure_func: Callable[[nx.Graph, List[List[int]]], float]
-#                                  )-> float:
-#     """ This function calculates what the effect is of moving the given node to the other partition.
-
-#     Args:
-#         graph (nx.Graph): The community network.
-#         partitions (Tuple[List[int], List[int]]): The two partitions of the graph.
-#         node (int): The node that we move to the other partition.
-#         measure_func (Callable[[nx.Graph, List[List[int]]], float]): The function that determines the score based on the given measurement function.
-
-#     Returns:
-#         float: The measurement score if we would move the specified node to the other partition.
-#     """
-#     partition1, partition2 = partitions
-#     if node in partition1:
-#         move_node(node,partition1,partition2)
-#     else:
-#         move_node(node,partition2,partition1)
-        
-#     score = measure_func(graph, [partition1,partition2])
-    
-#     if node in partition2:
-#         move_node(node,partition2,partition1)
-#     else:
-#         move_node(node,partition1,partition2)
-    
-#     return score
-
-
-# def simple_node_moving_naive(graph, measureFunc, maximize=True):
-#     partition1, partition2 = initial_two_partitions(graph)
-#     partitions = (partition1, partition2)
-#     old_partitions = tuple(partitions) # * 1
-#     best_partitions = tuple(partitions) #  * 1
-#     best_score = measureFunc(graph, partitions)
-    
-#     for n in partition1:
-#         move_and_assess(graph, n, partition1, partition2, measureFunc, maximize, old_partitions, best_partitions, best_score)
-  
-#     for n in partition2:
-#         move_and_assess(graph, n, partition2, partition1, measureFunc, maximize, old_partitions, best_partitions, best_score)
-        
-#     old_partitions = best_partitions
-
-#     return
-
-# def move_and_assess(graph, node, p1, p2, measureFunc, maximize, old_ps, best_ps, best_score):
-#     move_node(node, p1, p2)
-#     score = measureFunc(graph, (p1, p2))
-#     isBetter = False
-#     if maximize:
-#         isBetter = score > best_score
-#     else:
-#         isBetter = score < best_score
-
-#     if isBetter: 
-#         best_partitions = (p1, p2)
-#         best_score = score
-#     p1, p2 = old_ps
-
 def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
     return nx.community.modularity(graph, partition)
 
@@ -103,7 +15,7 @@ def modularity_density(graph: nx.Graph, partition: List[List[int]]) -> float:
     
     for i, com in enumerate(partition):
         ci = len(com)
-        eIn, eOut = calc_E_Ein_Eout(graph, com)
+        eIn, eOut = calc_Ein_Eout(graph, com)
         dci = calc_dci(alpha, eIn, ci)
 
         step = eIn / edges * dci - ((alpha * eIn + eOut)/(alpha * edges)*dci)**2
