@@ -8,6 +8,9 @@ import measures          as m
 import simpleNodeMoving  as snm
 import csv
 import time
+import generalizedLouvain as gl
+import dataExport as de
+
 
 def main():
     print("Hello World!")
@@ -15,31 +18,53 @@ def main():
     # Generate network with LFR
     start_time = time.time()
     nodes= 250
+    tau1=3
+    tau2=1.5
+    mu=0.1
+    average_degree=5
+    min_degree=None
+    max_degree=None
+    min_community=20
+    max_community=None
+    tol=1e-7
+    max_iters=500
+    seed=10
+    print("step1")
     graph = nx.generators.community.LFR_benchmark_graph(n=nodes,              # Number of Nodes
-                                                        tau1=3,             # Power Law exponent for degree distribution
-                                                        tau2=1.5,           # Power law exponent for community size distribution
-                                                        mu=0.1,             # Fraction of inter-community edges incident to each node
-                                                        average_degree=5,   # Desired average degree of nodes in the created graph
-                                                        min_degree=None,    # Minimum degree of nodes in the created graph
-                                                        max_degree=None,    # Maximum degree of nodes in the created graph
-                                                        min_community=int(nodes*0.25),   # Minimum degree for each node
-                                                        max_community=int(nodes*0.75), # Maximum degree for each node
-                                                        tol=1e-7,           # Tolerance when comparing floats
-                                                        max_iters=500,      # Maximum number of iterations to try to create the community sizes
-                                                        seed=10             # Indicator of random number generation state
+                                                        tau1=tau1,             # Power Law exponent for degree distribution
+                                                        tau2=tau2,           # Power law exponent for community size distribution
+                                                        mu=mu,             # Fraction of inter-community edges incident to each node
+                                                        average_degree=average_degree,   # Desired average degree of nodes in the created graph
+                                                        min_degree=min_degree,    # Minimum degree of nodes in the created graph
+                                                        max_degree=max_degree,    # Maximum degree of nodes in the created graph
+                                                        min_community=min_community,   # Minimum degree for each node
+                                                        max_community=max_community, # Maximum degree for each node
+                                                        tol=tol,           # Tolerance when comparing floats
+                                                        max_iters=max_iters,      # Maximum number of iterations to try to create the community sizes
+                                                        seed=seed            # Indicator of random number generation state
                                                        )
+    print("step2")
     end_time = time.time()
     print(f'graph gen time: {end_time-start_time}')
     
     start_time = time.time()
-    alg = snm.snm(graph=graph,measure_func=m.modularity,maximize=True)
-    communities, score= alg.run()
+    # nx.community.louvain_communities(graph)
+    communities = gl.louvain_communities(graph, m.modularity)#m.modularity)
+    score = m.modularity(graph, communities)
+    # alg = snm.snm(graph=graph,measure_func=m.modularity,maximize=True)
+    # communities, score= alg.run()
     
     communitiesGroundTruth = {frozenset(graph.nodes[v]["community"]) for v in graph}
     nmi = normalized_mutual_info_score(convert_to_1d(nodes,communitiesGroundTruth), convert_to_1d(nodes,communities))
     end_time = time.time()
     
+    print(f'Computation time: {end_time-start_time}')
     print(f'modularity score: {score}, nmi score: {nmi}, computation time: {end_time-start_time}')
+    
+    header = ["nodes","tau1","tau2","mu","average_degree","min_degree","max_degree","min_community","max_community","tol","max_iters","seed","score","nmi","time"]
+    row = [nodes,tau1,tau2,mu,average_degree,min_degree,max_degree,min_community,max_community,tol,max_iters,seed,score,nmi,end_time-start_time]
+    
+    de.write_csv_file("test.csv",header,[row])
       
 def convert_to_1d(size, communities):
     arr = np.zeros(size)

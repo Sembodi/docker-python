@@ -53,6 +53,8 @@ def calc_Ecicj(graph: nx.Graph, ci: List[int], cj: List[int]) -> int:
     return ecicj
 
 def calc_dci(alpha, ein, ci) -> int:
+    if (ci < 2):
+        return alpha*ein
     return alpha * ein / (ci*(ci - 1))
 
 def calc_dcicj(ecicj, ci, cj) -> int:
