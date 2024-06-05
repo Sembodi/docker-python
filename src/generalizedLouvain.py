@@ -42,7 +42,6 @@ def louvain_partitions(
     )
     improvement = True
     while improvement:
-        print("loop")
         # gh-5901 protect the sets in the yielded list from further manipulation here
         yield [s.copy() for s in partition]
         new_mod = score_func(graph, inner_partition) #ms.modularity(
