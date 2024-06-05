@@ -15,40 +15,63 @@ from typing import List, Tuple, Callable, Set
 
 
 def compute_data(config: cfg.graph_config, 
-                 measure: Callable[[nx.Graph, List[List[int]]], float], 
-                 num_iter: int = 5) -> None:
-    rows = []
-    print(f'computing {config.name}.')
+                 measures: List[Callable[[nx.Graph, List[List[int]]], float]], 
+                 num_iter: int = 1, random_seed: bool = False) -> None:
+
+
+    mat3 = [[] for _ in measures]
     
-    for i in range(num_iter):
-        config.seed = i
-        print(f'Compute iteration {i} ...')
+    succeeded = 0
+    if random_seed:
+        config.seed = None
+    else:
+        config.seed = -1
+
+    
+    
+    while succeeded < num_iter:
+        if not random_seed:
+            config.seed +=1
+        print(f'Compute iteration {succeeded} ...')
         print(f'Generating graph ...')
-        graph = nx.generators.community.LFR_benchmark_graph(**config.to_mapping())
-        communitiesGroundTruth = {frozenset(graph.nodes[v]["community"]) for v in graph}
+        try:
+            graph = nx.generators.community.LFR_benchmark_graph(**config.to_mapping())
+            communitiesGroundTruth = {frozenset(graph.nodes[v]["community"]) for v in graph}
+        except Exception as e:
+            print(f'Error: {e}. \nFailed to generate with current seed!')
+            print(f'Retrying with new seed')
+            continue
         
-        print(f'Detect communities ...')
-        start_time = time.time()
-        communities = gl.louvain_communities(graph, measure)
-        score = measure(graph, communities)
-        end_time = time.time()
+        print(f'Detect communities with generalized Louvain...')
+        # for measure in measures:
+        for i, measure in enumerate(measures):
+            print(f'detect using measure: {measure.__name__} ...')
+            start_time = time.time()
+            communities = gl.louvain_communities(graph, measure)
+            score = measure(graph, communities)
+            end_time = time.time()
+            
+            computation_time = end_time - start_time
+            
+            # calculate nmi 
+            nmi = normalized_mutual_info_score(convert_to_1d(config.nodes,communitiesGroundTruth), convert_to_1d(config.nodes,communities))
         
-        computation_time = end_time - start_time
+            # create data row
+            row = config.to_list() + [score,nmi,computation_time]   
+
+            mat3[i].append(row)
         
-        # calculate nmi 
-        nmi = normalized_mutual_info_score(convert_to_1d(config.nodes,communitiesGroundTruth), convert_to_1d(config.nodes,communities))
+        succeeded += 1
         
-        # create data row
-        row = config.to_list() + [score,nmi,computation_time]
-        rows.append(row)
-        
-    print(f' Saving data to file...')
+    print(f' Saving data to files...')
     header = ["nodes","tau1","tau2","mu","average_degree","min_degree","max_degree","min_community","max_community","tol","max_iters","seed","score","nmi","time"]
-    de.write_csv_file(config.name,header,rows)
+    
+    for i, measure in enumerate(measures):
+        de.write_csv_file(config.name + "_" + measure.__name__,header,mat3[i])
     
 
 def main():
-    compute_data(cfg.small_dense_graph,m.modularity)
+    compute_data(cfg.large_dense_graph,[m.modularity,m.deviation_to_uniformity])
     
     
     # print("Hello World!")

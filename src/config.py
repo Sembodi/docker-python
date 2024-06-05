@@ -46,12 +46,70 @@ class graph_config:
                 "seed"                : self.seed
                 }
     
-small_dense_graph = graph_config("small_dense_graphs"
-                                 ,nodes=50000
+large_sparse_graph = graph_config("large_sparse_graphs"
+                                 ,nodes=100000
+                                 ,tau1=2
+                                 ,tau2=2
                                  ,average_degree=None
-                                 ,min_degree=1
-                                 ,min_community=20
-                                 ,max_community=2000
-                                 ,max_iter = 500)
+                                 ,min_degree=10
+                                 ,max_degree=50
+                                 ,min_community=100
+                                 ,max_community=999
+                                 ,max_iter = 252)
+
+medium_sparse_graph = graph_config("medium_sparse_graphs"
+                                 ,nodes=10000
+                                 ,tau1=2
+                                 ,tau2=2
+                                 ,average_degree=None
+                                 ,min_degree=3
+                                 ,max_degree=30
+                                 ,min_community=100
+                                 ,max_community=999
+                                 ,max_iter = 906)
+
+small_sparse_graph = graph_config("small_sparse_graphs"
+                                 ,nodes=10000
+                                 ,tau1=2
+                                 ,tau2=2
+                                 ,average_degree=None
+                                 ,min_degree=3
+                                 ,max_degree=30
+                                 ,min_community=100
+                                 ,max_community=999
+                                 ,max_iter = 906)
+
+large_dense_graph = graph_config("large_dense_graphs"
+                                 ,nodes=100000
+                                 ,tau1=3
+                                 ,tau2=1.5
+                                 ,average_degree=None
+                                 ,min_degree=50
+                                 ,max_degree=None
+                                 ,min_community=2000
+                                 ,max_community=None
+                                 ,max_iter = 1000)
+
+medium_dense_graph = graph_config("medium_dense_graphs"
+                                 ,nodes=10000
+                                 ,tau1=2
+                                 ,tau2=2
+                                 ,average_degree=None
+                                 ,min_degree=3
+                                 ,max_degree=30
+                                 ,min_community=100
+                                 ,max_community=999
+                                 ,max_iter = 906)
+
+small_dense_graph = graph_config("small_dense_graphs"
+                                 ,nodes=10000
+                                 ,tau1=2
+                                 ,tau2=2
+                                 ,average_degree=None
+                                 ,min_degree=3
+                                 ,max_degree=30
+                                 ,min_community=100
+                                 ,max_community=999
+                                 ,max_iter = 906)
         
  

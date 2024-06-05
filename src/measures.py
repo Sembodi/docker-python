@@ -4,32 +4,62 @@ import random
 import numpy as np
 from typing import List, Tuple
 
+# def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
+#     return nx.community.modularity(graph, partition)
+
+
 def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
-    return nx.community.modularity(graph, partition)
-
-
-def modularity_density(graph: nx.Graph, partition: List[List[int]]) -> float:
-    alpha = 2
-    edges = len(graph.nodes())
     sum = 0
+    edges = len(graph.edges())
+
+    alpha = 2
     
     for i, com in enumerate(partition):
         ci = len(com)
         eIn, eOut = calc_Ein_Eout(graph, com)
-        dci = calc_dci(alpha, eIn, ci)
 
-        step = eIn / edges * dci - ((alpha * eIn + eOut)/(alpha * edges)*dci)**2
-
-        for other in np.delete(partition, i, 0):
-            cj = len(other)
-            ecicj = calc_Ecicj(graph, com, other)
-            dcicj = calc_dcicj(ecicj, ci, cj)
-
-            step += ecicj / (alpha * edges) * dcicj
-        
-        sum += step
+        sum += eIn / edges - ((alpha * eIn + eOut)/(alpha * edges))**2
 
     return sum
+
+def deviation_to_uniformity(graph: nx.Graph, partition: List[List[int]]) -> float:
+    sum = 0
+    nodes = len(graph.nodes())
+    edges = len(graph.edges())
+
+    alpha = 2
+    
+    for i, com in enumerate(partition):
+        ci = len(com)
+        eIn, eOut = calc_Ein_Eout(graph, com)
+
+        sum += eIn / edges - (ci/nodes)**2
+
+    return sum
+
+
+# def modularity_density(graph: nx.Graph, partition: List[List[int]]) -> float:
+#     alpha = 2
+#     edges = len(graph.edges())
+#     sum = 0
+    
+#     for i, com in enumerate(partition):
+#         ci = len(com)
+#         eIn, eOut = calc_Ein_Eout(graph, com)
+#         dci = calc_dci(alpha, eIn, ci)
+
+#         step = eIn / edges * dci - ((alpha * eIn + eOut)/(alpha * edges)*dci)**2
+
+#         for other in np.delete(partition, i, 0):
+#             cj = len(other)
+#             ecicj = calc_Ecicj(graph, com, other)
+#             dcicj = calc_dcicj(ecicj, ci, cj)
+
+#             step += ecicj / (alpha * edges) * dcicj
+        
+#         sum += step
+
+#     return sum
 
 def calc_Ein_Eout(graph: nx.Graph, part: List[int]) -> Tuple[int, int]:
     ein, eout = 0, 0
@@ -43,22 +73,22 @@ def calc_Ein_Eout(graph: nx.Graph, part: List[int]) -> Tuple[int, int]:
     return ein, eout
 
 
-def calc_Ecicj(graph: nx.Graph, ci: List[int], cj: List[int]) -> int:
-    ecicj = 0
+# def calc_Ecicj(graph: nx.Graph, ci: List[int], cj: List[int]) -> int:
+#     ecicj = 0
     
-    for node in ci:
-        for neighbor in graph.neighbors(node):
-            if (neighbor in cj):
-                ecicj += 1
-    return ecicj
+#     for node in ci:
+#         for neighbor in graph.neighbors(node):
+#             if (neighbor in cj):
+#                 ecicj += 1
+#     return ecicj
 
-def calc_dci(alpha, ein, ci) -> int:
-    if (ci < 2):
-        return alpha*ein
-    return alpha * ein / (ci*(ci - 1))
+# def calc_dci(alpha, ein, ci) -> int:
+#     if (ci < 2):
+#         return alpha*ein
+#     return alpha * ein / (ci*(ci - 1))
 
-def calc_dcicj(ecicj, ci, cj) -> int:
-    return ecicj / (ci*cj)
+# def calc_dcicj(ecicj, ci, cj) -> int:
+#     return ecicj / (ci*cj)
 
 
 
