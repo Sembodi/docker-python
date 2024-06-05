@@ -16,9 +16,8 @@ from typing import List, Tuple, Callable, Set
 
 def compute_data(config: cfg.graph_config, 
                  measures: List[Callable[[nx.Graph, List[List[int]]], float]], 
-                 num_iter: int = 1, random_seed: bool = False) -> None:
-
-
+                 num_iter: int = 10, random_seed: bool = False) -> None:
+    print(f'computing {config.name}.')
     mat3 = [[] for _ in measures]
     
     succeeded = 0
@@ -71,7 +70,7 @@ def compute_data(config: cfg.graph_config,
     
 
 def main():
-    compute_data(cfg.large_dense_graph,[m.modularity,m.deviation_to_uniformity])
+    compute_data(cfg.medium_sparse_graph,[m.modularity,m.deviation_to_uniformity])
     
     
     # print("Hello World!")
