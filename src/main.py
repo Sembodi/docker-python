@@ -53,8 +53,8 @@ def compute_data(config: cfg.graph_config,
             computation_time = end_time - start_time
             
             # calculate nmi 
-            nmi = normalized_mutual_info_score(convert_to_1d(config.nodes,communitiesGroundTruth), convert_to_1d(config.nodes,communities))
-        
+            nmi = normalized_mutual_info_score(to_labels(config.nodes,communitiesGroundTruth), to_labels(config.nodes,communities))
+            
             # create data row
             row = config.to_list() + [score,nmi,computation_time]   
 
@@ -70,7 +70,7 @@ def compute_data(config: cfg.graph_config,
     
 
 def main():
-    compute_data(cfg.medium_sparse_graph,[m.modularity,m.deviation_to_uniformity])
+    compute_data(cfg.mini_sparse_graph,[m.deviation_to_uniformity])
     
     
     # print("Hello World!")
@@ -128,7 +128,7 @@ def main():
     
     # de.write_csv_file("test.csv",header,[row])
       
-def convert_to_1d(size, communities):
+def to_labels(size, communities):
     arr = np.zeros(size)
     for i, com in enumerate(communities):
         for node in com:

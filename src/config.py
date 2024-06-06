@@ -63,12 +63,21 @@ medium_sparse_graph = graph_config("medium_sparse_graphs"
                                  ,min_community=200
                                  ,max_community=2000)
 
+
 small_sparse_graph = graph_config("small_sparse_graphs"
                                  ,nodes=1000
                                  ,min_degree=5
                                  ,max_degree=15
                                  ,min_community=20
                                  ,max_community=200)
+
+mini_sparse_graph  = graph_config("mini_sparse_graphs"
+                                 ,nodes=100
+                                 ,min_degree = 2
+                                 , max_degree = 10
+                                 , min_community=10
+                                 , max_community=30
+                                 )
 
 large_dense_graph = graph_config("large_dense_graphs"
                                  ,nodes=100000
@@ -91,5 +100,12 @@ small_dense_graph = graph_config("small_dense_graphs"
                                  ,max_degree=100
                                  ,min_community=20
                                  ,max_community=100)
+
+mini_dense_graph = graph_config("mini_dense_graphs"
+                                 ,nodes=100
+                                 ,min_degree=15
+                                 ,max_degree=40
+                                 ,min_community=20
+                                 ,max_community=60)
         
  
