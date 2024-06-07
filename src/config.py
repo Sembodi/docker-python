@@ -46,66 +46,64 @@ class graph_config:
                 "seed"                : self.seed
                 }
     
-large_sparse_graph = graph_config("large_sparse_graphs"
-                                 ,nodes=100000
-                                 ,tau1=2
-                                 ,tau2=2
-                                 ,min_degree=10
-                                 ,max_degree=50
-                                 ,min_community=100
-                                 ,max_community=999
-                                 ,max_iter = 500)
+n100_000_sparse = graph_config("n100_000_sparse_graphs"
+                               ,nodes=100000
+                               ,mu=0.3
+                               ,min_degree=10
+                               ,max_degree=50
+                               ,min_community=100
+                               ,max_community=1000)
 
-medium_sparse_graph = graph_config("medium_sparse_graphs"
-                                 ,nodes=10000
-                                 ,min_degree=5
-                                 ,max_degree=15
-                                 ,min_community=200
-                                 ,max_community=2000)
+n100_000_dense = graph_config("n100_000_dense_graphs"
+                              ,nodes=100000
+                              ,mu=0.3
+                              ,min_degree=100
+                              ,max_degree=500
+                              ,min_community=100
+                              ,max_community=1000)
 
+n10_000_sparse = graph_config("n10_000_sparse_graphs"
+                              ,nodes=10000
+                              ,mu=0.2
+                              ,min_degree=5
+                              ,max_degree=15
+                              ,min_community=50
+                              ,max_community=500)
 
-small_sparse_graph = graph_config("small_sparse_graphs"
-                                 ,nodes=1000
-                                 ,min_degree=5
-                                 ,max_degree=15
-                                 ,min_community=20
-                                 ,max_community=200)
+n10_000_dense = graph_config("n10_000_dense_graphs"
+                             ,nodes=10000
+                             ,mu=0.2
+                             ,min_degree=50
+                             ,max_degree=150
+                             ,min_community=50
+                             ,max_community=500)
 
-mini_sparse_graph  = graph_config("mini_sparse_graphs"
-                                 ,nodes=100
-                                 ,min_degree = 2
-                                 , max_degree = 10
-                                 , min_community=10
-                                 , max_community=30
-                                 )
+n1000_sparse = graph_config("n1000_sparse_graphs"
+                            ,nodes=1000
+                            ,min_degree=5
+                            ,max_degree=15
+                            ,min_community=20
+                            ,max_community=200)
 
-large_dense_graph = graph_config("large_dense_graphs"
-                                 ,nodes=100000
-                                 ,min_degree=100
-                                 ,max_degree=500
-                                 ,min_community=100
-                                 ,max_community=1000
-                                 ,max_iter = 500)
+n1000_dense = graph_config("n1000_dense_graphs"
+                           ,nodes=1000
+                           ,min_degree=20
+                           ,max_degree=100
+                           ,min_community=20
+                           ,max_community=200)
 
-medium_dense_graph = graph_config("medium_dense_graphs"
-                                 ,nodes=10000
-                                 ,min_degree=50
-                                 ,max_degree=200
-                                 ,min_community=50
-                                 ,max_community=300)
+n100_sparse = graph_config("n100_sparse_graphs"
+                           ,nodes=100
+                           ,min_degree = 2
+                           ,max_degree = 10
+                           ,min_community=20
+                           ,max_community=60)
 
-small_dense_graph = graph_config("small_dense_graphs"
-                                 ,nodes=1000
-                                 ,min_degree=20
-                                 ,max_degree=100
-                                 ,min_community=20
-                                 ,max_community=100)
-
-mini_dense_graph = graph_config("mini_dense_graphs"
-                                 ,nodes=100
-                                 ,min_degree=15
-                                 ,max_degree=40
-                                 ,min_community=20
-                                 ,max_community=60)
+n100_dense = graph_config("n100_dense_graphs"
+                          ,nodes=100
+                          ,min_degree=15
+                          ,max_degree=40
+                          ,min_community=20
+                          ,max_community=60)
         
  
