@@ -1,6 +1,4 @@
-# Investigating the influence of Network Structure on Measurement Accuracy
-
-TODO: add abstract ...
+# Investigating the influence of Network Structure on Measurement Accuracy  
 
 ## Prerequisites
 
@@ -11,6 +9,11 @@ TODO: add abstract ...
 - [for Windows](https://docs.docker.com/docker-for-windows/install/)
 
 Or have python installed with the libraries defined in *requirements.txt*.
+
+```sh
+# Install the used libraries
+pip install -r requirements.txt
+```
 
 ## Setup
 
@@ -39,23 +42,21 @@ Or just run the following script:
 
 To use it without docker:
 ```sh
-# Install the used libraries
-pip install -r requirements.txt
+# Run the program to generate data
+python src/main.py
 
-# Go to src dir
-cd src
+# Run the program to generate figures based on the data
+python src/dataProcessing.py
 
-# Run the program
-python main.py
 ```
 
 ## Data collection
 This program stores a *csv* file for each graph type combined with the specified measure in the */data* folder.
 For all iterations in each file it stores:
   - *LFR graph parameters* that are used to generate the graph and the ground truth (Including the Seed).
-  - *NMI score* of the detected communities using *generalized Louvain* with the specified measure compared to the ground truth.
+  - *NMI score* of the detected communities using generalized Louvain with the specified measure compared to the ground truth.
   - *Computation time* of finding the best partition.   
 
 ## Data Analysis
 
-...
+The *dataProcessing.py* program is used to generate figures regarding the NMI score, Quality Score, and computation time.

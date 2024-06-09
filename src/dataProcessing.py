@@ -97,7 +97,7 @@ for i_d, density in enumerate(densities):
     plt.ylabel("Computation time [s]")
     
     plt.legend(loc="lower right")
-    plt.savefig("runtime_{}.pdf".format(density))
+    plt.savefig("data/runtime_{}.pdf".format(density))
 
 
 #PLOT THE COMPUTATION TIMES AS SHOWN IN PAPER:
@@ -143,7 +143,7 @@ for i_d, density in enumerate(densities):
     plt.xlabel("Network size $n$")
     plt.ylabel("NMI score")
 
-    plt.savefig("nmi_{}.pdf".format(density))
+    plt.savefig("data/nmi_{}.pdf".format(density))
     
 
 
