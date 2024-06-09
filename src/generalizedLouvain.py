@@ -1,12 +1,16 @@
+"""
+ This file contains a modified version of the louvain algorithm of NetworkX: 
+    https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.community.louvain.louvain_communities.html
+    
+ This generalized version can use any given quality score function to find the best partition.
+"""
+
 import itertools
 from collections import defaultdict, deque
 import networkx as nx
 from networkx.utils import py_random_state
 
-# import measures as ms
-
 @py_random_state("seed")
-# @nx._dispatchable(edge_attrs="weight")
 def louvain_communities(
     G, score_func,weight="weight", resolution=1, threshold=0.0000001, max_level=None, seed=None
 ):
@@ -19,7 +23,6 @@ def louvain_communities(
     return final_partition.pop()
 
 @py_random_state("seed")
-# @nx._dispatchable(edge_attrs="weight")
 def louvain_partitions(
     G, score_func,weight="weight", resolution=1, threshold=0.0000001, seed=None
 ):
@@ -27,7 +30,7 @@ def louvain_partitions(
     if nx.is_empty(G):
         yield partition
         return
-    mod = score_func(G, partition) #ms.modularity(G, partition) #, resolution=resolution, weight=weight)
+    mod = score_func(G, partition)
     is_directed = G.is_directed()
     if G.is_multigraph():
         graph = _convert_multigraph(G, weight, is_directed)
@@ -44,9 +47,7 @@ def louvain_partitions(
     while improvement:
         # gh-5901 protect the sets in the yielded list from further manipulation here
         yield [s.copy() for s in partition]
-        new_mod = score_func(graph, inner_partition) #ms.modularity(
-            #graph, inner_partition)#, resolution=resolution, weight="weight"
-        #)
+        new_mod = score_func(graph, inner_partition) 
         if new_mod - mod <= threshold:
             return
         mod = new_mod
@@ -59,25 +60,6 @@ def louvain_partitions(
 
 
 def _one_level(G, m, partition, resolution=1, is_directed=False, seed=None):
-    """Calculate one level of the Louvain partitions tree
-
-    Parameters
-    ----------
-    G : NetworkX Graph/DiGraph
-        The graph from which to detect communities
-    m : number
-        The size of the graph `G`.
-    partition : list of sets of nodes
-        A valid partition of the graph `G`
-    resolution : positive number
-        The resolution parameter for computing the modularity of a partition
-    is_directed : bool
-        True if `G` is a directed graph.
-    seed : integer, random_state, or None (default)
-        Indicator of random number generation state.
-        See :ref:`Randomness<randomness>`.
-
-    """
     node2com = {u: i for i, u in enumerate(G.nodes())}
     inner_partition = [{u} for u in G.nodes()]
     if is_directed:
@@ -167,16 +149,6 @@ def _one_level(G, m, partition, resolution=1, is_directed=False, seed=None):
 
 
 def _neighbor_weights(nbrs, node2com):
-    """Calculate weights between node and its neighbor communities.
-
-    Parameters
-    ----------
-    nbrs : dictionary
-           Dictionary with nodes' neighbors as keys and their edge weight as value.
-    node2com : dictionary
-           Dictionary with all graph's nodes as keys and their community index as value.
-
-    """
     weights = defaultdict(float)
     for nbr, wt in nbrs.items():
         weights[node2com[nbr]] += wt
@@ -184,7 +156,6 @@ def _neighbor_weights(nbrs, node2com):
 
 
 def _gen_graph(G, partition):
-    """Generate a new graph based on the partitions of a given graph"""
     H = G.__class__()
     node2com = {}
     for i, part in enumerate(partition):
@@ -204,7 +175,6 @@ def _gen_graph(G, partition):
 
 
 def _convert_multigraph(G, weight, is_directed):
-    """Convert a Multigraph to normal Graph"""
     if is_directed:
         H = nx.DiGraph()
     else:
