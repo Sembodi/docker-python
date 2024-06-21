@@ -75,13 +75,13 @@ def compute_data(config: cfg.graph_config,
         de.write_csv_file(config.name + "_" + measure.__name__,header,mat3[i])
     
 def main():
-    graph_types = [cfg.n100_dense    ,cfg.n100_sparse]
-                #   ,cfg.n1000_dense   ,cfg.n1000_sparse
-                #   ,cfg.n10_000_dense ,cfg.n10_000_sparse
-                #   ,cfg.n100_000_dense,cfg.n100_000_sparse]
+    graph_types = [cfg.n100_dense    ,cfg.n100_sparse
+                  ,cfg.n1000_dense   ,cfg.n1000_sparse
+                  ,cfg.n10_000_dense ,cfg.n10_000_sparse
+                  ,cfg.n100_000_dense,cfg.n100_000_sparse]
     
     for graph_type in graph_types:
-        compute_data(graph_type,[m.modularity,m.zahn_condorcet],1)
+        compute_data(graph_type,[m.modularity,m.zahn_condorcet],25)
     
 def to_labels(size, communities):
     arr = np.zeros(size)
