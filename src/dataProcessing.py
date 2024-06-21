@@ -1,34 +1,25 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Jun  6 11:19:14 2024
-
-@author: sembo
+    This file generates figures, based on the generated data files.
+    Results are located in /Data (After you run the program)
 """
 
-# Run this file locally or put it in main()
-
-import numpy as np
+import numpy             as np
 import matplotlib.pyplot as plt
-import sklearn as sk
 
 import matplotlib.patheffects as PathEffects
 
-from matplotlib.lines import Line2D
+from matplotlib.lines   import Line2D
 from matplotlib.patches import Patch
 
 
-sizes = ["mini","small","medium","large"]
+sizes  = ["mini","small","medium","large"]
 sizes2 = ["n100", "n1000", "n10_000", "n100_000"]
-
 sizes3 = ["100","1000","10,000","100,000"]
 
-xs    = np.array([1,2,3,4])
+xs     = np.array([1,2,3,4])
 
 densities = ["sparse","dense"]
-
-measures = ["modularity", "zahn_condorcet"]
-
-
+measures  = ["modularity", "zahn_condorcet"]
 
 colors  = [(.6,.3,.9),(.3,.6,.9),'r','c','m','y','k','w']
 colors2 = plt.cm.hsv(np.linspace(0, 1, len(measures)))
@@ -38,10 +29,9 @@ d = len(densities)
 m = len(measures)
 
 allData = np.zeros((d,s,m,27))   # 2: sparse or dense; 
-                                    # 4: mini, small, medium, large; 
-                                    # 2: modularity, deviation_to_uniformity; 
-                                    # 5: measures: avg + sigma + nmi + sigma each, + avg run time
-
+                                 # 4: mini, small, medium, large; 
+                                 # 2: modularity, deviation_to_uniformity; 
+                                 # 5: measures: avg + sigma + nmi + sigma each, + avg run time
 
 
 legend_elements = []
@@ -108,9 +98,6 @@ for i_d, density in enumerate(densities):
         
         bplot = ax.boxplot(np.transpose(allData[i_d,:,i_m,:-2]), positions = xs + offsets[i_m], patch_artist = True, widths = width, boxprops = dict(facecolor = colors[i_m]))
         
-        # for box in bplot['boxes']:
-        #     box.set_facecolor(colors[i_m])
-        
         for i, median in enumerate(bplot['medians']):
                 
                 sizeIndex    = i % len(sizes)
@@ -136,16 +123,9 @@ for i_d, density in enumerate(densities):
         plt.axvline(tick+.5, color='gray', linestyle = '--', linewidth=.5)
     plt.tick_params(bottom=False)
     
-    # plt.legend(handles=legend_elements)
-    
     plt.ylim(.4,1.05)
     
     plt.xlabel("Network size $n$")
     plt.ylabel("NMI score")
 
-    plt.savefig("data/nmi_{}.pdf".format(density))
-    
-
-
-            
-            
+    plt.savefig("data/nmi_{}.pdf".format(density))           

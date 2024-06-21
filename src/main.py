@@ -12,6 +12,19 @@ import config             as cfg
 def compute_data(config: cfg.graph_config, 
                  measures: List[Callable[[nx.Graph, List[List[int]]], float]], 
                  num_iter: int = 5, random_seed: bool = False) -> None:
+    """ This function generates and LFR graph based on the specified configuration,
+    Detected the communities using the specified measure,
+    calculates the NMI score of the detected communities vs the ground truth,
+    measures the computation time for detecting the communities,
+    does this for the specified number of iterations,
+    and finally stores all data in a "csv" file located at /Data.
+
+    Args:
+        config (cfg.graph_config): LFR graph configuration parameters.
+        measures (List[Callable[[nx.Graph, List[List[int]]], float]]): Measure to use as the quality score function.
+        num_iter (int, optional): Number of iterations to run (with different seeds). Defaults to 5.
+        random_seed (bool, optional): When True use a random seed, otherwise start at seed: 0. Defaults to False.
+    """
     print(f'computing {config.name}.')
     mat3 = [[] for _ in measures]
     
@@ -62,13 +75,13 @@ def compute_data(config: cfg.graph_config,
         de.write_csv_file(config.name + "_" + measure.__name__,header,mat3[i])
     
 def main():
-    graph_types = [cfg.n100_dense    ,cfg.n100_sparse
-                  ,cfg.n1000_dense   ,cfg.n1000_sparse
-                  ,cfg.n10_000_dense ,cfg.n10_000_sparse
-                  ,cfg.n100_000_dense,cfg.n100_000_sparse]
+    graph_types = [cfg.n100_dense    ,cfg.n100_sparse]
+                #   ,cfg.n1000_dense   ,cfg.n1000_sparse
+                #   ,cfg.n10_000_dense ,cfg.n10_000_sparse
+                #   ,cfg.n100_000_dense,cfg.n100_000_sparse]
     
     for graph_type in graph_types:
-        compute_data(graph_type,[m.modularity,m.zahn_condorcet],25)
+        compute_data(graph_type,[m.modularity,m.zahn_condorcet],1)
     
 def to_labels(size, communities):
     arr = np.zeros(size)

@@ -1,3 +1,4 @@
-matplotlib
-networkx[default]
-scikit-learn
+matplotlib==3.4.3
+numpy==1.22.0
+scikit-learn==0.24.2
+networkx[default]==3.1

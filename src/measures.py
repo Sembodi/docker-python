@@ -2,6 +2,15 @@ from typing     import List, Tuple
 import networkx as nx
 
 def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
+    """This function calculates the modularity score.
+
+    Args:
+        graph (nx.Graph): generated graph.
+        partition (List[List[int]]): graph partitions.
+
+    Returns:
+        float: Quality score value.
+    """
     sum = 0
     edges = len(graph.edges())
 
@@ -15,7 +24,16 @@ def modularity(graph: nx.Graph, partition: List[List[int]]) -> float:
 
     return sum
 
-def zahn_condorcet(graph, partition) -> float:
+def zahn_condorcet(graph: nx.Graph, partition: List[List[int]]) -> float:
+    """This function calculates the zahn_condorcet score.
+
+    Args:
+        graph (nx.Graph): generated graph.
+        partition (List[List[int]]): graph partitions.
+
+    Returns:
+        float: Quality score value.
+    """
     sum = 0
     nodes = len(graph.nodes())
     edges = len(graph.edges())

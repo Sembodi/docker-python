@@ -1,8 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Any
+from typing      import List, Any
 
 @dataclass
 class graph_config:
+    """ This data class contains the parameters that are required for the LFR benchmark algorithm.
+    """
     name            : str
     nodes           : int
     tau1            : float=3
@@ -18,6 +20,11 @@ class graph_config:
     seed            : Any=None
 
     def to_list(self) -> List[Any]:
+        """ This function converts the LFR parameters to a list.
+
+        Returns:
+            List[Any]: A list of all LFR parameters.
+        """
         return [self.nodes,
                 self.tau1,
                 self.tau2,
@@ -31,7 +38,9 @@ class graph_config:
                 self.max_iter, 
                 self.seed]
         
-    def to_mapping(self):
+    def to_mapping(self) -> None:
+        """ This function maps the parameters to the defined parameters of the LFR_benchmark_graph() function.
+        """
         return {"n"                   : self.nodes,
                 "tau1"                : self.tau1,
                 "tau2"                : self.tau2,
@@ -45,7 +54,10 @@ class graph_config:
                 "max_iters"           : self.max_iter,
                 "seed"                : self.seed
                 }
-    
+
+# -----------------------------------
+#   Various LFR graph configurations
+# -----------------------------------
 n100_000_sparse = graph_config("n100_000_sparse_graphs"
                                ,nodes=100000
                                ,mu=0.3
@@ -105,5 +117,3 @@ n100_dense = graph_config("n100_dense_graphs"
                           ,max_degree=40
                           ,min_community=20
                           ,max_community=60)
-        
- 
